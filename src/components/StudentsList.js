@@ -101,7 +101,6 @@ const StudentsList = (props) => {
   } */
 
   const openStudent = (rowIndex) => {
-    alert(rowIndex)
     const id = studentsRef.current[rowIndex].id;
 
     props.history.push("/students/" + id);
