@@ -52,14 +52,6 @@ const Student = (props) => {
 
   });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm({
-    resolver: yupResolver(validationSchema)
-  });
-
   const getStudent = id => {
     StudentDataService.get(id)
       .then(response => {
@@ -69,11 +61,23 @@ const Student = (props) => {
         setDepartment(JSON.parse(response.data.departments));
         setProfilePicture(response.data.profilePicture);
         console.log(response.data);
+        reset({firstName:currentStudent.firstName, lastName:currentStudent.lastName })
       })
       .catch(e => {
         console.log(e);
       });
   };
+  
+  const {
+    register,
+    handleSubmit,
+    formState: { errors},
+    reset
+  } = useForm({
+    defaultValues: {firstName:currentStudent.firstName, lastName:currentStudent.lastName },
+    resolver: yupResolver(validationSchema),
+    
+  });
 
   const upload = (event) => {
     console.log("*****in Upload")
@@ -96,7 +100,11 @@ const Student = (props) => {
     getStudent(props.match.params.id);
   }, [props.match.params.id]);
 
-  const handleInputChange = event => {
+  useEffect(() => {
+    console.log("*&*",currentStudent);
+  }, [currentStudent]);
+
+  const handleInputChange = async (event) => {
     const { name, value } = event.target;
     setCurrentStudent({ ...currentStudent, [name]: value });
   }; 
@@ -104,8 +112,8 @@ const Student = (props) => {
   const updateStatus = status => {
     const data = {
       id: currentStudent.id,
-      firstname: currentStudent.firstname,
-      lastname: currentStudent.lastname,
+      firstName: currentStudent.firstName,
+      lastName: currentStudent.lastName,
       DOB: DOB,
       profilePicture: profilePicture,
       gender: gender,
@@ -127,6 +135,11 @@ const Student = (props) => {
   };
 
   const updateContent = () => {
+    
+    currentStudent.DOB = new Date(DOB).getTime();
+    currentStudent.gender = gender;
+    currentStudent.departments = JSON.stringify(department);
+    currentStudent.profilePicture = profilePicture;
     dispatch(updateStudent(currentStudent.id, currentStudent))
       .then(response => {
         console.log(response);
@@ -138,31 +151,26 @@ const Student = (props) => {
       });
   };
 
-  const removeStudent = () => {
-    dispatch(deleteStudent(currentStudent.id))
-      .then(() => {
-        props.history.push("/students");
-      })
-      .catch(e => {
-        console.log(e);
-      });
+  const backToList = () => {
+    props.history.push("/students");
   };
 
   return (
     <div>
       {currentStudent ? (
         <div className="edit-form">
-          <h4>Student</h4>
+          <h4>Edit Student</h4>
           <form onSubmit={handleSubmit(updateContent)}>
             <div className="form-group">
               <label htmlFor="firstname">FirstName</label>
               <input
                 {...register('firstName')}
                 type="text"
+                value={currentStudent.firstName}
                 className={`form-control ${errors.firstName ? 'is-invalid' : ''}`}
                 id="firstname"
-                name="firstname"
-                value={currentStudent.firstName}
+                name="firstName"
+                
                 onChange={handleInputChange}
               />
               <div className="invalid-feedback">{errors.firstName?.message}</div>
@@ -173,7 +181,7 @@ const Student = (props) => {
                 type="text"
                 className={`form-control ${errors.lastName ? 'is-invalid' : ''}`}
                 id="lastname"
-                name="lastname"
+                name="lastName"
                 {...register('lastName')}
                 value={currentStudent.lastName}
                 onChange={handleInputChange}
@@ -255,21 +263,24 @@ const Student = (props) => {
               <input name="profilePicture" id="profilePicture" type="file" onChange={upload} />
 
             </div>
-            
+            <div className="form-group">
+            <button type="submit" className="btn btn-primary">
+              Update
+          </button>
+          &nbsp;
+          <button type="button" className="btn btn-primary" onClick={backToList}>
+              Back
+          </button>
+          </div>
           </form>
 
          
 
-          <button className="badge badge-danger mr-2" onClick={removeStudent}>
+          {/* <button className="btn btn-primary" onClick={removeStudent}>
             Delete
-          </button>
+          </button> */}
 
-          <button
-            type="submit"
-            className="badge badge-success"
-          >
-            Update
-          </button>
+          
           <p>{message}</p>
         </div>
       ) : (
