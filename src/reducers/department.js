@@ -8,7 +8,7 @@ const departmentReducer = (department = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
-    
+
 
     case GET_DEPARTMENT:
       return [...department, payload];

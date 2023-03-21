@@ -28,7 +28,7 @@ const StudentsList = (props) => {
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  
+
   const students = useSelector(state => state.students);
   const dispatch = useDispatch();
   const studentsRef = useRef();
@@ -37,25 +37,25 @@ const StudentsList = (props) => {
     dispatch(retrieveStudents());
   }, []);
 
-  
 
-  const options = [{value:0, label:"All"},{value:1, label:"Male"},{value:2, label:"Female"}]
+
+  const options = [{ value: 0, label: "All" }, { value: 1, label: "Male" }, { value: 2, label: "Female" }]
   const [gender, setGender] = useState(options[0]);
   const onChangeSearchTitle = e => {
     const searchTitle = e.target.value;
     setSearchTitle(searchTitle);
   };
 
-  
+
 
   const refreshData = () => {
     setCurrentStudent(null);
     setCurrentIndex(-1);
   };
 
-  const onChangeSearchDOB= range => {
+  const onChangeSearchDOB = range => {
     console.log(range)
-    const formatedRange = range && range[0] && range[1] ? new Date(range[0]).getTime()+','+ moment(new Date(range[1]).getTime()).add(86399, 'seconds') : '';
+    const formatedRange = range && range[0] && range[1] ? new Date(range[0]).getTime() + ',' + moment(new Date(range[1]).getTime()).add(86399, 'seconds') : '';
     /* if(range & range.length > 0){
       const newList = students.filter(data => data.DOB > new Date(range[0]).getTime() && data.DOB < moment(new Date(range[1]).getTime()).add(86399, 'seconds') )
     //refreshData();
@@ -89,9 +89,9 @@ const StudentsList = (props) => {
 
   const findByGender = (value) => {
     refreshData();
-      dispatch(findStudentsByGender(value));
-    
-    
+    dispatch(findStudentsByGender(value));
+
+
   };
 
   /* const findByDate = () => {
@@ -109,7 +109,7 @@ const StudentsList = (props) => {
 
   const deleteOneStudent = (rowIndex) => {
     const sid = studentsRef.current[rowIndex].id;
-    
+
     //dispatch(deleteStudent(id))
     dispatch(deleteStudent(sid))
       .then(response => {
@@ -119,18 +119,18 @@ const StudentsList = (props) => {
       .catch(e => {
         console.log(e);
       });
-/*     StudentDataService.remove(id)
-      .then((response) => {
-        props.history.push("/students");
-
-        let newStudents = [...studentsRef.current];
-        newStudents.splice(rowIndex, 1);
-
-        setStudents(newStudents);
-      })
-      .catch((e) => {
-        console.log(e);
-      }); */
+    /*     StudentDataService.remove(id)
+          .then((response) => {
+            props.history.push("/students");
+    
+            let newStudents = [...studentsRef.current];
+            newStudents.splice(rowIndex, 1);
+    
+            setStudents(newStudents);
+          })
+          .catch((e) => {
+            console.log(e);
+          }); */
   };
 
   const columns = useMemo(
@@ -138,8 +138,8 @@ const StudentsList = (props) => {
       {
         Header: "ProfilePicture",
         accessor: "profilePicture",
-        Cell:(props)=>{
-          return <img src={props.value} width="100px" height="auto"/>
+        Cell: (props) => {
+          return <img src={props.value} width="100px" height="auto" />
         }
       },
       {
@@ -162,7 +162,7 @@ const StudentsList = (props) => {
         Header: "departments",
         accessor: "departments",
         Cell: (props) => {
-          const depJson = JSON.parse(props.value); 
+          const depJson = JSON.parse(props.value);
           const dep = depJson.map(i => i.label)
           return dep.join()
         }
@@ -241,46 +241,46 @@ const StudentsList = (props) => {
         </div>
       </div>
       <div className="col-md-5">
-      <DatePicker className="form-control student-custom-input"
-            utcOffset="0"
-            selected={startDate}
-            selectsRange
-            startDate={startDate}
-            endDate={endDate}
-            
-            onChange={(dates) => {
-              
-              const [start, end] = dates;
-              
-              onChangeSearchDOB(dates);
-                
-              setStartDate(start);
-              setEndDate(end);
-              
-              
-              }} 
-            dateFormat="MMM dd, yyyy"  
-            maxDate={new Date()}
-            placeholderText="Select Date Range"
-            showYearDropdown
-            isClearable
-            onBlur={()=>{
-              onChangeSearchDOB();
-            }}
-            />
+        <DatePicker className="form-control student-custom-input"
+          utcOffset="0"
+          selected={startDate}
+          selectsRange
+          startDate={startDate}
+          endDate={endDate}
+
+          onChange={(dates) => {
+
+            const [start, end] = dates;
+
+            onChangeSearchDOB(dates);
+
+            setStartDate(start);
+            setEndDate(end);
+
+
+          }}
+          dateFormat="MMM dd, yyyy"
+          maxDate={new Date()}
+          placeholderText="Select Date Range"
+          showYearDropdown
+          isClearable
+          onBlur={() => {
+            onChangeSearchDOB();
+          }}
+        />
       </div>
       <div className="col-md-2">
-      <Select
-        defaultValue={gender}
-        value={gender}
-        onChange={(data) => {
-          
-          setGender(data)
-          findByGender(data.value)
-          console.log(data + gender)
+        <Select
+          defaultValue={gender}
+          value={gender}
+          onChange={(data) => {
+
+            setGender(data)
+            findByGender(data.value)
+            console.log(data + gender)
           }}
-        options={options}
-      />
+          options={options}
+        />
       </div>
       <div className="col-md-12">
         <table

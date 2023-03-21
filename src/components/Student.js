@@ -61,22 +61,22 @@ const Student = (props) => {
         setDepartment(JSON.parse(response.data.departments));
         setProfilePicture(response.data.profilePicture);
         console.log(response.data);
-        reset({firstName:currentStudent.firstName, lastName:currentStudent.lastName })
+        reset({ firstName: currentStudent.firstName, lastName: currentStudent.lastName })
       })
       .catch(e => {
         console.log(e);
       });
   };
-  
+
   const {
     register,
     handleSubmit,
-    formState: { errors},
+    formState: { errors },
     reset
   } = useForm({
-    defaultValues: {firstName:currentStudent.firstName, lastName:currentStudent.lastName },
+    defaultValues: { firstName: currentStudent.firstName, lastName: currentStudent.lastName },
     resolver: yupResolver(validationSchema),
-    
+
   });
 
   const upload = (event) => {
@@ -101,13 +101,13 @@ const Student = (props) => {
   }, [props.match.params.id]);
 
   useEffect(() => {
-    console.log("*&*",currentStudent);
+    console.log("*&*", currentStudent);
   }, [currentStudent]);
 
   const handleInputChange = async (event) => {
     const { name, value } = event.target;
     setCurrentStudent({ ...currentStudent, [name]: value });
-  }; 
+  };
 
   const updateStatus = status => {
     const data = {
@@ -118,7 +118,7 @@ const Student = (props) => {
       profilePicture: profilePicture,
       gender: gender,
       mobileNo: currentStudent.mobileNo,
-      email:currentStudent.email,
+      email: currentStudent.email,
       departments: JSON.stringify(department),
       status: currentStudent.status
     };
@@ -135,7 +135,7 @@ const Student = (props) => {
   };
 
   const updateContent = () => {
-    
+
     currentStudent.DOB = new Date(DOB).getTime();
     currentStudent.gender = gender;
     currentStudent.departments = JSON.stringify(department);
@@ -170,7 +170,7 @@ const Student = (props) => {
                 className={`form-control ${errors.firstName ? 'is-invalid' : ''}`}
                 id="firstname"
                 name="firstName"
-                
+
                 onChange={handleInputChange}
               />
               <div className="invalid-feedback">{errors.firstName?.message}</div>
@@ -259,28 +259,28 @@ const Student = (props) => {
 
             <div className="form-group">
               <label htmlFor="description">ProfilePicture</label>
-              <img src={profilePicture} width="75px" height="75px"/>
+              <img src={profilePicture} width="75px" height="75px" />
               <input name="profilePicture" id="profilePicture" type="file" onChange={upload} />
 
             </div>
             <div className="form-group">
-            <button type="submit" className="btn btn-primary">
-              Update
-          </button>
-          &nbsp;
-          <button type="button" className="btn btn-primary" onClick={backToList}>
-              Back
-          </button>
-          </div>
+              <button type="submit" className="btn btn-primary">
+                Update
+              </button>
+              &nbsp;
+              <button type="button" className="btn btn-primary" onClick={backToList}>
+                Back
+              </button>
+            </div>
           </form>
 
-         
+
 
           {/* <button className="btn btn-primary" onClick={removeStudent}>
             Delete
           </button> */}
 
-          
+
           <p>{message}</p>
         </div>
       ) : (

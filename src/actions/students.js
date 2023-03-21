@@ -18,11 +18,11 @@ export const createStudent = (
   mobileNo,
   email,
   departments,
-  ) => async (dispatch) => {
+) => async (dispatch) => {
   try {
     console.log('*@*@*@*@**@**@')
     console.log(profilePicture)
-    const res = await StudentDataService.create({ 
+    const res = await StudentDataService.create({
       firstName,
       lastName,
       profilePicture,
@@ -31,7 +31,7 @@ export const createStudent = (
       mobileNo,
       email,
       departments,
-     });
+    });
 
     dispatch({
       type: CREATE_STUDENT,

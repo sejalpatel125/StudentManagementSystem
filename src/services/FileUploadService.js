@@ -9,7 +9,7 @@ const upload = (file, onUploadProgress) => {
   const img = axios.post("https://api.upload.io/v2/accounts/kW15b9R/uploads/form_data", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
-      "Authorization": "Bearer public_kW15b9R4HvUmETFkxGmwp4LrPDhv" 
+      "Authorization": "Bearer public_kW15b9R4HvUmETFkxGmwp4LrPDhv"
     },
     onUploadProgress,
   });
